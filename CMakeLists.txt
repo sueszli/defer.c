@@ -12,7 +12,7 @@ endif()
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-# https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++
+# https://github.com/ossf/wg-best-practices-os-developers/blob/main/docs/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C%2B%2B.md
 # https://github.com/airbus-seclab/c-compiler-security
 
 # setting flags correctly in cmake: https://github.com/pytorch/pytorch/blob/264e7f68a095b5b2f10e7ca66a3bbb16f6e56e28/CMakeLists.txt#L1043
