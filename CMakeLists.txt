@@ -1,0 +1,21 @@
+cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
+project(main LANGUAGES C)
+
+if(CMAKE_C_COMPILER_ID MATCHES "GNU" AND CMAKE_C_COMPILER_VERSION VERSION_LESS 9.3)
+    message(FATAL_ERROR "GCC is too old: ${CMAKE_C_COMPILER_VERSION}")
+endif()
+
+if(CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_C_COMPILER_VERSION VERSION_LESS 10.0)
+    message(FATAL_ERROR "Clang is too old: ${CMAKE_C_COMPILER_VERSION}")
+endif()
+
+set(CMAKE_C_STANDARD 23)
+set(CMAKE_C_STANDARD_REQUIRED ON)
+
+# https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++
+# https://github.com/airbus-seclab/c-compiler-security
+
+# setting flags correctly in cmake: https://github.com/pytorch/pytorch/blob/264e7f68a095b5b2f10e7ca66a3bbb16f6e56e28/CMakeLists.txt#L1043
+
+add_compile_definitions(DEBUG)
+remove_compile_definitions(NDEBUG)
