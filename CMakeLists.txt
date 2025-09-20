@@ -17,5 +17,11 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 # setting flags correctly in cmake: https://github.com/pytorch/pytorch/blob/264e7f68a095b5b2f10e7ca66a3bbb16f6e56e28/CMakeLists.txt#L1043
 
+# both: -O2 -Wall -Wformat -Wformat=2 -Wconversion -Wimplicit-fallthrough -Werror=format-security  -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3  -D_GLIBCXX_ASSERTIONS  -fstrict-flex-arrays=3  -fstack-clash-protection -fstack-protector-strong  -Wl,-z,nodlopen -Wl,-z,noexecstack  -Wl,-z,relro -Wl,-z,now  -Wl,--as-needed -Wl,--no-copy-dt-needed-entries
+
+# gcc: -Wtrampolines -fzero-init-padding-bits=all -Wbidi-chars=any
+
+
+
 add_compile_definitions(DEBUG)
 remove_compile_definitions(NDEBUG)
