@@ -21,7 +21,5 @@ set(CMAKE_C_STANDARD_REQUIRED ON)
 
 # gcc: -Wtrampolines -fzero-init-padding-bits=all -Wbidi-chars=any
 
-
-
 add_compile_definitions(DEBUG)
 remove_compile_definitions(NDEBUG)
