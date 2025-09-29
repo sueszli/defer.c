@@ -42,6 +42,8 @@ add_compile_options(
     -Wsign-conversion
     -Wtrampolines
     -Wbidi-chars=any
+    # executable (for shared libraries use `-fPIC -shared`)
+    -fPIE -pie
 )
 
 # debug and release mode options
@@ -69,7 +71,6 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU")
   )
 endif()
 if(CMAKE_C_COMPILER_ID MATCHES "Clang")
-    # ???
 endif()
 
 # architecture specific options
@@ -83,9 +84,3 @@ if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|ARM64")
     -mbranch-protection=standard
   )
 endif()
-
-# for executables: -> set with global flag
-#   -fPIE -pie
-
-# for shared libraries: -> set with global flag
-#   -fPIC -shared
