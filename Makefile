@@ -1,23 +1,16 @@
-.PHONY: demo
-demo:
-	tmpdir=$$(mktemp -d) && cmake -S . -B $$tmpdir && cmake --build $$tmpdir --verbose && $$tmpdir/demo && rm -rf $$tmpdir
-
-
-
-
-
-
 DOCKER_RUN = docker run --rm -v $(PWD):/workspace main sh -c
 
 .PHONY: build-image
 build-image:
 	docker build -t main .
 
-# figure out how to run both in clang and gcc
+.PHONY: run-gcc
+run-gcc: build-image
+	$(DOCKER_RUN) "cd /tmp/gcc-build && cmake -DCMAKE_C_COMPILER=gcc /workspace && make && ./demo"
 
-.PHONY: run
-run:
-	$(DOCKER_RUN) "cd $(mktemp -d) && cmake /workspace && make -j$(nproc) && ./autograd"
+.PHONY: run-clang
+run-clang: build-image
+	$(DOCKER_RUN) "cd /tmp/clang-build && cmake -DCMAKE_C_COMPILER=clang /workspace && make && ./demo"
 
 .PHONY: fmt
 fmt:
