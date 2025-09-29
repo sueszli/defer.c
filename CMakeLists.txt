@@ -5,10 +5,10 @@ project(demo LANGUAGES C)
 # https://github.com/ossf/wg-best-practices-os-developers/blob/main/docs/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C%2B%2B.md
 #
 
-message(STATUS "detected make version: ${CMAKE_VERSION}")
-message(STATUS "detected compiler version: ${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}")
-message(STATUS "detected architecture: ${CMAKE_SYSTEM_PROCESSOR}")
-message(STATUS "detected system: ${CMAKE_SYSTEM_NAME}")
+message(STATUS "make version: ${CMAKE_VERSION}")
+message(STATUS "compiler version: ${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VERSION}")
+message(STATUS "architecture: ${CMAKE_SYSTEM_PROCESSOR}")
+message(STATUS "system: ${CMAKE_SYSTEM_NAME}")
 
 # minimum versions
 set(CMAKE_C_STANDARD 23)
