@@ -1,14 +1,9 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
 project(demo LANGUAGES C)
 
-#
-# compiler hardening
-# https://github.com/ossf/wg-best-practices-os-developers/blob/main/docs/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C%2B%2B.md
-#
-
-# minimum versions
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
+
 if(CMAKE_C_COMPILER_ID MATCHES "GNU" AND CMAKE_C_COMPILER_VERSION VERSION_LESS 13.0.0)
   message(FATAL_ERROR "GCC is outdated: ${CMAKE_C_COMPILER_VERSION}")
 endif()
@@ -16,7 +11,11 @@ if(CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_C_COMPILER_VERSION VERSION_LESS
   message(FATAL_ERROR "Clang is outdated: ${CMAKE_C_COMPILER_VERSION}")
 endif()
 
-# default
+#
+# compiler hardening
+# https://github.com/ossf/wg-best-practices-os-developers/blob/main/docs/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C%2B%2B.md
+#
+
 add_compile_options(
   -O2
   -Wall
@@ -36,13 +35,13 @@ add_compile_options(
   -Werror=implicit
   -Werror=incompatible-pointer-types
   -Werror=int-conversion
-  # multithreaded with pthreads
+  # multithreading with pthreads
   -fexceptions
-  # executable (for shared libraries use `-fPIC -shared`)
+  # for shared libraries use `-fPIC`
   -fPIE
 )
 
-# build specific
+# build type specific
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
   add_compile_options(
     -fno-delete-null-pointer-checks -fno-strict-overflow -fno-strict-aliasing -ftrivial-auto-var-init=zero
