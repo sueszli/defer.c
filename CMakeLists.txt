@@ -42,7 +42,7 @@ add_compile_options(
   -fPIE
 )
 
-# build type specific
+# build mode specific
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
   add_compile_options(
     -fno-delete-null-pointer-checks -fno-strict-overflow -fno-strict-aliasing -ftrivial-auto-var-init=zero
