@@ -12,7 +12,8 @@ run:
 
 .PHONY: fmt
 fmt:
-	$(DOCKER_RUN) 'find . -name "*.c" -o -name "*.h" | xargs clang-format -i'
+	uvx --from cmakelang cmake-format --dangle-parens --line-width 120 -i CMakeLists.txt
+	find . -name "*.c" -o -name "*.h" | xargs clang-format -i
 
 .PHONY: clean
 clean:
