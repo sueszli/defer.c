@@ -1,3 +1,12 @@
+.PHONY: demo
+demo:
+	tmpdir=$$(mktemp -d) && gcc -o $$tmpdir/demo demo.c && $$tmpdir/demo && rm -rf $$tmpdir
+
+
+
+
+
+
 DOCKER_RUN = docker run --rm -v $(PWD):/workspace main sh -c
 
 .PHONY: build-image

@@ -1,4 +1,4 @@
-project(main LANGUAGES C)
+project(demo LANGUAGES C)
 
 #
 # compiler hardening
@@ -92,4 +92,4 @@ endif()
 # sources
 #
 
-add_executable(main main.c)
+add_executable(demo demo.c)
