@@ -6,11 +6,11 @@ build-image:
 
 .PHONY: run-gcc
 run-gcc: build-image
-	$(DOCKER_RUN) "cd /tmp/gcc-build && cmake -DCMAKE_C_COMPILER=gcc /workspace && make && ./demo"
+	$(DOCKER_RUN) "mkdir -p /tmp/gcc-build && cd /tmp/gcc-build && cmake -DCMAKE_C_COMPILER=gcc /workspace && make && ./demo"
 
 .PHONY: run-clang
 run-clang: build-image
-	$(DOCKER_RUN) "cd /tmp/clang-build && cmake -DCMAKE_C_COMPILER=clang /workspace && make && ./demo"
+	$(DOCKER_RUN) "mkdir -p /tmp/clang-build && cd /tmp/clang-build && cmake -DCMAKE_C_COMPILER=clang /workspace && make && ./demo"
 
 .PHONY: fmt
 fmt:

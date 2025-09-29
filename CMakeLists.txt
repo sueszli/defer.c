@@ -4,7 +4,7 @@ project(demo LANGUAGES C)
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 
-if(CMAKE_C_COMPILER_ID MATCHES "GNU" AND CMAKE_C_COMPILER_VERSION VERSION_LESS 13.0.0)
+if(CMAKE_C_COMPILER_ID MATCHES "GNU" AND CMAKE_C_COMPILER_VERSION VERSION_LESS 14.0.0)
   message(FATAL_ERROR "GCC is outdated: ${CMAKE_C_COMPILER_VERSION}")
 endif()
 if(CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_C_COMPILER_VERSION VERSION_LESS 16.0.0)
@@ -12,8 +12,8 @@ if(CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_C_COMPILER_VERSION VERSION_LESS
 endif()
 
 #
-# compiler hardening
-# see: https://github.com/ossf/wg-best-practices-os-developers/blob/main/docs/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C%2B%2B.md
+# compiler hardening see:
+# https://github.com/ossf/wg-best-practices-os-developers/blob/main/docs/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C%2B%2B.md
 #
 
 add_compile_options(
@@ -26,6 +26,7 @@ add_compile_options(
   -Wsign-conversion
   -Wimplicit-fallthrough
   -Werror=format-security
+  # more portable and explicit than -fhardened
   -U_FORTIFY_SOURCE
   -D_FORTIFY_SOURCE=3
   -D_GLIBCXX_ASSERTIONS
@@ -52,7 +53,7 @@ endif()
 
 # os specific
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-  add_compile_options(-fstack-clash-protection -Wtrampolines -Wbidi-chars=any)
+  add_compile_options(-fstack-clash-protection)
   add_link_options(
     -pie
     -Wl,-z,nodlopen
@@ -66,7 +67,8 @@ endif()
 
 # compiler specific
 if(CMAKE_C_COMPILER_ID MATCHES "GNU")
-  add_compile_options(-Wtrampolines -fzero-init-padding-bits=all -Wbidi-chars=any -fhardened)
+  # from gcc-15 add `-fzero-init-padding-bits=all`
+  add_compile_options(-Wtrampolines -Wbidi-chars=any)
 endif()
 if(CMAKE_C_COMPILER_ID MATCHES "Clang")
   # nop
