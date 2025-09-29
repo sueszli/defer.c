@@ -28,6 +28,7 @@ if(CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_C_COMPILER_VERSION VERSION_LESS
 endif()
 
 add_compile_options(
+    # default default options
     -O2 -Wall -Wformat -Wformat=2 -Wconversion -Wimplicit-fallthrough
     -Werror=format-security
     -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3
@@ -37,11 +38,11 @@ add_compile_options(
     -Wl,-z,nodlopen -Wl,-z,noexecstack
     -Wl,-z,relro -Wl,-z,now
     -Wl,--as-needed -Wl,--no-copy-dt-needed-entries
-    # deprecated c
+    # deprecated c calls
     -Werror=implicit -Werror=incompatible-pointer-types -Werror=int-conversion
     # multithreaded with pthreads
     -fexceptions
-    # more compile time options
+    # other compile time options (table 1 from ossf doc)
     -Wall
     -Wextra
     -Wsign-conversion
