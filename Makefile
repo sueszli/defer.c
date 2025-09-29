@@ -1,6 +1,6 @@
 .PHONY: demo
 demo:
-	tmpdir=$$(mktemp -d) && gcc -o $$tmpdir/demo demo.c && $$tmpdir/demo && rm -rf $$tmpdir
+	tmpdir=$$(mktemp -d) && cmake -S . -B $$tmpdir && cmake --build $$tmpdir --verbose && $$tmpdir/demo && rm -rf $$tmpdir
 
 
 
