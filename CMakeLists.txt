@@ -10,25 +10,19 @@ message(STATUS "detected compiler: ${CMAKE_C_COMPILER_ID} ${CMAKE_C_COMPILER_VER
 message(STATUS "detected architecture: ${CMAKE_SYSTEM_PROCESSOR}")
 message(STATUS "detected system: ${CMAKE_SYSTEM_NAME}")
 
-# c standard version
+# minimum versions
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
-
-# minimum make version
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
-
-# minimum gcc version
 if(CMAKE_C_COMPILER_ID MATCHES "GNU" AND CMAKE_C_COMPILER_VERSION VERSION_LESS 13.0.0)
   message(FATAL_ERROR "GCC is too old: ${CMAKE_C_COMPILER_VERSION}")
 endif()
-
-# minimum clang version
 if(CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_C_COMPILER_VERSION VERSION_LESS 16.0.0)
   message(FATAL_ERROR "Clang is too old: ${CMAKE_C_COMPILER_VERSION}")
 endif()
 
+# default options
 add_compile_options(
-    # default default options
     -O2 -Wall -Wformat -Wformat=2 -Wconversion -Wimplicit-fallthrough
     -Werror=format-security
     -U_FORTIFY_SOURCE -D_FORTIFY_SOURCE=3
@@ -50,22 +44,23 @@ add_compile_options(
     -Wbidi-chars=any
 )
 
-# TODO: ....
+# debug and release mode options
+if(CMAKE_BUILD_TYPE STREQUAL "Debug" AND CMAKE_BUILD_TYPE STREQUAL "Release")
+  message(FATAL_ERROR "Cannot build in both Debug and Release mode simultaneously")
+endif()
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+  add_compile_options(-Werror)
+endif()
+if(CMAKE_BUILD_TYPE STREQUAL "Release")
+  add_compile_options(
+    -fno-delete-null-pointer-checks
+    -fno-strict-overflow
+    -fno-strict-aliasing
+    -ftrivial-auto-var-init=zero
+  )
+endif()
 
-# development mode but not release
-#   -Werror
-
-# release mode but not production
-#   -fno-delete-null-pointer-checks -fno-strict-overflow -fno-strict-aliasing -ftrivial-auto-var-init=zero
-
-# for executables: -> set with global flag
-#   -fPIE -pie
-
-# for shared libraries: -> set with global flag
-#   -fPIC -shared
-
-
-# gcc only options
+# compiler specific options
 if(CMAKE_C_COMPILER_ID MATCHES "GNU")
   add_compile_options(
     -Wtrampolines -fzero-init-padding-bits=all
@@ -73,22 +68,24 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU")
     -fhardened
   )
 endif()
-
-# clang only options
 if(CMAKE_C_COMPILER_ID MATCHES "Clang")
-    # ...
+    # ???
 endif()
 
-# x86 only options
+# architecture specific options
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|i686|i386")
   add_compile_options(
     -fcf-protection=full
   )
 endif()
-
-# aarch64 only options
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|ARM64")
   add_compile_options(
     -mbranch-protection=standard
   )
 endif()
+
+# for executables: -> set with global flag
+#   -fPIE -pie
+
+# for shared libraries: -> set with global flag
+#   -fPIC -shared
