@@ -1,7 +1,7 @@
 project(main LANGUAGES C)
 
 #
-# compiler hardening see:
+# compiler hardening
 # https://github.com/ossf/wg-best-practices-os-developers/blob/main/docs/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C%2B%2B.md
 #
 
@@ -87,3 +87,9 @@ endif()
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|ARM64")
   add_compile_options(-mbranch-protection=standard)
 endif()
+
+#
+# sources
+#
+
+add_executable(main main.c)
