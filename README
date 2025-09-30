@@ -11,18 +11,15 @@ $ toilet -f mono12 "defer.c"
 inspired by: https://github.com/moon-chilled/Defer
 
 
-
-
-# https://github.com/ossf/wg-best-practices-os-developers/blob/main/docs/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C%2B%2B.md
-
-keep as is, try turning into some universal cmake template or something
-
 # setting flags correctly in cmake: https://github.com/pytorch/pytorch/blob/264e7f68a095b5b2f10e7ca66a3bbb16f6e56e28/CMakeLists.txt#L1043
 
 todo:
+
+```
 # add valgrind (requires disabling asan)
 
 option(DISABLE_ASAN "Disable AddressSanitizer" OFF)
 if(NOT DISABLE_ASAN)
     set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
 endif()
+```
