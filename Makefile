@@ -7,7 +7,7 @@ DOCKER_RUN = docker run --rm -v $(PWD):/workspace main sh -c
 .PHONY: build-image
 build-image:
 	docker build -t main .
-
+ 
 .PHONY: docker-gcc
 docker-gcc:
 	$(DOCKER_RUN) "mkdir -p /tmp/gcc-build && cd /tmp/gcc-build && cmake -DCMAKE_C_COMPILER=gcc /workspace && cmake --build . -j$$(nproc) && ./binary"
@@ -38,7 +38,6 @@ run:
 
 ##############################
 
-# also add lsan?
 # am i using leaks correctly?
 # static analysis: cppcheck, Clang Static Analyzer
 
