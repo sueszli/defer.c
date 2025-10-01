@@ -1,0 +1,6 @@
+# LeakSanitizer suppressions for false positives from macOS system libraries.
+# See: https://github.com/llvm/llvm-project/issues/115992
+
+# Safe to ignore. It's internal Objective-C runtime bookkeeping invisible to our C code.
+# See: https://github.com/apple-oss-distributions/objc4/blob/f126469408dc82bd3f327217ae678fd0e6e3b37c/runtime/objc-initialize.mm#L287
+leak:_fetchInitializingClassList
