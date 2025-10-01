@@ -10,17 +10,11 @@ void tearDown(void) {
     // clean up code if needed
 }
 
-void test_basic_assertion(void) {
-    TEST_ASSERT_TRUE(1);
-}
+void test_basic_assertion(void) { TEST_ASSERT_TRUE(1); }
 
-void test_equality(void) {
-    TEST_ASSERT_EQUAL(42, 42);
-}
+void test_equality(void) { TEST_ASSERT_EQUAL(42, 42); }
 
-void test_string_equality(void) {
-    TEST_ASSERT_EQUAL_STRING("hello", "hello");
-}
+void test_string_equality(void) { TEST_ASSERT_EQUAL_STRING("hello", "hello"); }
 
 void test_null_assertion(void) {
     void *ptr = NULL;

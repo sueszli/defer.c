@@ -86,28 +86,43 @@ if(NOT DISABLE_ASAN)
   add_link_options(-fsanitize=address)
 endif()
 
-# 
+#
 # dependencies
-# 
+#
 
 include(FetchContent)
 
 if(BUILD_TESTS)
-    FetchContent_Declare(
-        unity
-        GIT_REPOSITORY https://github.com/ThrowTheSwitch/Unity.git
-        GIT_TAG v2.6.1
-        GIT_SHALLOW TRUE
-    )
+  FetchContent_Declare(
+    unity
+    GIT_REPOSITORY https://github.com/ThrowTheSwitch/Unity.git
+    GIT_TAG v2.6.1
+    GIT_SHALLOW TRUE
+  )
 
-    set(BUILD_TESTING OFF CACHE BOOL "" FORCE)
-    
-    set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
-    set(UNITY_EXTENSION_FIXTURE OFF CACHE BOOL "" FORCE)
-    set(UNITY_EXTENSION_MEMORY OFF CACHE BOOL "" FORCE)
-    set(UNITY_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+  set(BUILD_TESTING
+      OFF
+      CACHE BOOL "" FORCE
+  )
 
-    FetchContent_MakeAvailable(unity)
+  set(BUILD_SHARED_LIBS
+      OFF
+      CACHE BOOL "" FORCE
+  )
+  set(UNITY_EXTENSION_FIXTURE
+      OFF
+      CACHE BOOL "" FORCE
+  )
+  set(UNITY_EXTENSION_MEMORY
+      OFF
+      CACHE BOOL "" FORCE
+  )
+  set(UNITY_BUILD_TESTS
+      OFF
+      CACHE BOOL "" FORCE
+  )
+
+  FetchContent_MakeAvailable(unity)
 endif()
 
 #
@@ -119,17 +134,17 @@ add_executable(defer src/defer.c)
 file(GLOB_RECURSE TEST_FILES test/*.c)
 
 if(BUILD_TESTS)
-    enable_testing()
+  enable_testing()
 
-    foreach(TEST_FILE ${TEST_FILES})
-        get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
-        set(TEST_SOURCE "test/${TEST_NAME}.c")
-        set(TEST_EXECUTABLE "${TEST_NAME}_binary")
+  foreach(TEST_FILE ${TEST_FILES})
+    get_filename_component(TEST_NAME ${TEST_FILE} NAME_WE)
+    set(TEST_SOURCE "test/${TEST_NAME}.c")
+    set(TEST_EXECUTABLE "${TEST_NAME}_binary")
 
-        add_executable(${TEST_EXECUTABLE} ${TEST_SOURCE})
-        target_link_libraries(${TEST_EXECUTABLE} PRIVATE unity)
-        target_include_directories(${TEST_EXECUTABLE} PRIVATE ${unity_SOURCE_DIR}/src)
+    add_executable(${TEST_EXECUTABLE} ${TEST_SOURCE})
+    target_link_libraries(${TEST_EXECUTABLE} PRIVATE unity)
+    target_include_directories(${TEST_EXECUTABLE} PRIVATE ${unity_SOURCE_DIR}/src)
 
-        add_test(NAME ${TEST_NAME} COMMAND ${TEST_EXECUTABLE})
-    endforeach()
+    add_test(NAME ${TEST_NAME} COMMAND ${TEST_EXECUTABLE})
+  endforeach()
 endif()
