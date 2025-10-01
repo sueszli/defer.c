@@ -36,12 +36,24 @@ docker-clean:
 run:
 	mkdir -p /tmp/build && cd /tmp/build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && cmake --build . --target run
 
-# also try: Instruments
 .PHONY: leaks
 leaks:
 	mkdir -p /tmp/leaks-build && cd /tmp/leaks-build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu)
 	codesign -s - -f --entitlements entitlements.plist /tmp/leaks-build/defer
-	MallocStackLogging=1 leaks --atExit -- /tmp/leaks-build/defer
+	leaks --atExit -- /tmp/leaks-build/defer
+
+# install xcode from app store
+.PHONY: instruments
+instruments:
+	mkdir -p /tmp/instruments-build && cd /tmp/instruments-build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu)
+	codesign -s - -f --entitlements entitlements.plist /tmp/instruments-build/defer
+	instruments -t Leaks /tmp/instruments-build/defer
+
+.PHONY: xctrace
+xctrace:
+	mkdir -p /tmp/xctrace-build && cd /tmp/xctrace-build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu)
+	codesign -s - -f --entitlements entitlements.plist /tmp/xctrace-build/defer
+	xctrace record --template 'Leaks' --launch -- /tmp/xctrace-build/defer
 
 .PHONY: test
 test:
