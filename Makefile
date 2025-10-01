@@ -38,7 +38,11 @@ run:
 
 .PHONY: leaks
 leaks:
-	mkdir -p /tmp/local-leaks-build && cd /tmp/local-leaks-build && cmake -DDISABLE_ASAN=ON $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && leaks --atExit -- ./defer
+	mkdir -p /tmp/local-leaks-build && cd /tmp/local-leaks-build && \
+	echo '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><key>com.apple.security.get-task-allow</key><true/></dict></plist>' > entitlements.plist && \
+	cmake -DDISABLE_ASAN=ON $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && \
+	codesign -s - -f --entitlements entitlements.plist ./defer && \
+	MallocStackLogging=1 MallocScribble=1 MallocGuardEdges=1 leaks --atExit -- ./defer
 
 .PHONY: test
 test:
