@@ -40,7 +40,7 @@ run:
 
 # also add lsan?
 # am i using leaks correctly?
-# static analysis: cppcheck, clang analyze, scan-build
+# static analysis: cppcheck, Clang Static Analyzer
 
 .PHONY: leaks
 leaks:
