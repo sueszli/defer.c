@@ -81,9 +81,14 @@ endif()
 # sanitizers
 #
 
-if(NOT DISABLE_ASAN AND NOT (APPLE AND CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|ARM64"))
+if(NOT DISABLE_ASAN)
   add_compile_options(-fsanitize=address -fsanitize-address-use-after-scope -fno-omit-frame-pointer -g)
   add_link_options(-fsanitize=address)
+endif()
+
+if(NOT DISABLE_UBSAN)
+  add_compile_options(-fsanitize=undefined -fno-omit-frame-pointer -g)
+  add_link_options(-fsanitize=undefined)
 endif()
 
 #

@@ -5,6 +5,12 @@
 int main(void) {
     printf("Hello, World!\n");
 
+    // undefined behavior: integer overflow
+    int x = __INT_MAX__;
+    int y = x + 1;
+    printf("overflow result: %d\n", y);
+
+    // memory leak
     volatile char *leak1 = malloc(100000);
     volatile char *leak2 = malloc(100000);
     volatile char *leak3 = malloc(100000);
