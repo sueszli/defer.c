@@ -41,7 +41,6 @@ run:
 
 #   Static Analysis
 #   - Clang Static Analyzer - scan-build cmake ... && scan-build make
-#   - Infer (Facebook's static analyzer) - Works on macOS, good at finding memory issues
 #   - Cppcheck - cppcheck --enable=all src/
 
 #   Runtime Detection
