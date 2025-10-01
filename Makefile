@@ -9,19 +9,19 @@ build-image:
 	docker build -t main .
 
 .PHONY: docker-gcc
-docker-gcc: build-image
+docker-gcc:
 	$(DOCKER_RUN) "mkdir -p /tmp/gcc-build && cd /tmp/gcc-build && cmake -DCMAKE_C_COMPILER=gcc /workspace && cmake --build . -j$$(nproc) && ./defer"
 
 .PHONY: docker-clang
-docker-clang: build-image
+docker-clang:
 	$(DOCKER_RUN) "mkdir -p /tmp/clang-build && cd /tmp/clang-build && cmake -DCMAKE_C_COMPILER=clang /workspace && cmake --build . -j$$(nproc) && ./defer"
 
 .PHONY: docker-valgrind
-docker-valgrind: build-image
+docker-valgrind:
 	$(DOCKER_RUN) "mkdir -p /tmp/valgrind-build && cd /tmp/valgrind-build && cmake -DDISABLE_ASAN=ON /workspace && cmake --build . -j$$(nproc) && valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./defer"
 
 .PHONY: docker-test
-docker-test: build-image
+docker-test:
 	$(DOCKER_RUN) "mkdir -p /tmp/test-build && cd /tmp/test-build && cmake -DBUILD_TESTS=ON /workspace && cmake --build . -j$$(nproc) && ctest --output-on-failure"
 
 .PHONY: docker-clean
