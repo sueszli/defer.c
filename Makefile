@@ -32,11 +32,13 @@ docker-clean:
 # apple silicon development
 # 
 
+# can i somehow add these flags right into cmake?
 .PHONY: run
 run:
-	mkdir -p /tmp/build && cd /tmp/build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && MALLOC_PROTECT_BEFORE=1 DYLD_INSERT_LIBRARIES=/usr/lib/libgmalloc.dylib ./defer
+	mkdir -p /tmp/build && cd /tmp/build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && MallocStackLogging=1 MALLOC_PROTECT_BEFORE=1 DYLD_INSERT_LIBRARIES=/usr/lib/libgmalloc.dylib ./defer
 
-# also try: lldb, Instruments
+
+# also try: Instruments
 .PHONY: leaks
 leaks:
 	mkdir -p /tmp/leaks-build && cd /tmp/leaks-build && cmake -DCMAKE_C_COMPILER=clang -DDISABLE_ASAN=ON $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu)
