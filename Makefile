@@ -16,6 +16,14 @@ run-clang: build-image
 run-valgrind: build-image
 	$(DOCKER_RUN) "mkdir -p /tmp/valgrind-build && cd /tmp/valgrind-build && cmake -DDISABLE_ASAN=ON /workspace && make && valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./demo"
 
+.PHONY: run-local
+run-local:
+	mkdir -p /tmp/clang-build && cd /tmp/clang-build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && make && ./demo
+
+.PHONY: run-local-leaks
+run-local-leaks:
+	mkdir -p /tmp/leaks-build && cd /tmp/leaks-build && cmake -DDISABLE_ASAN=ON $(PWD) && make && leaks --atExit -- ./demo
+
 .PHONY: fmt
 fmt:
 	uvx --from cmakelang cmake-format --dangle-parens --line-width 120 -i CMakeLists.txt
