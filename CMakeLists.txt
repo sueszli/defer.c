@@ -92,10 +92,9 @@ endif()
 if(NOT DISABLE_GMALLOC AND (APPLE AND CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|ARM64"))
   add_custom_target(
     run
-    COMMAND sh -c "MallocStackLogging=1 MALLOC_PROTECT_BEFORE=1 DYLD_INSERT_LIBRARIES=/usr/lib/libgmalloc.dylib '$<TARGET_FILE:defer>' 2>/dev/null"
+    COMMAND ${CMAKE_COMMAND} -E env MallocStackLogging=1 MALLOC_PROTECT_BEFORE=1 DYLD_INSERT_LIBRARIES=/usr/lib/libgmalloc.dylib $<TARGET_FILE:defer>
     DEPENDS defer
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    VERBATIM
   )
 endif()
 
