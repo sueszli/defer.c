@@ -48,7 +48,5 @@ int main(void) {
     // int arr[10];
     // arr[10] = 100;
 
-    // sleep(1);
-
     return EXIT_SUCCESS;
 }

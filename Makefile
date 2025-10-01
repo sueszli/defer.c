@@ -36,25 +36,12 @@ docker-clean:
 run: fmt lint
 	mkdir -p /tmp/build && cd /tmp/build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && cmake --build . --target run-gmalloc
 
-##############################
-
 # am i using leaks correctly?
-# how to use xctrace correctly?
-
 .PHONY: leaks
 leaks:
 	mkdir -p /tmp/leaks-build && cd /tmp/leaks-build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu)
 	codesign -s - -f --entitlements entitlements.plist /tmp/leaks-build/binary
 	leaks --atExit -- /tmp/leaks-build/binary
-
-.PHONY: xctrace
-xctrace:
-	mkdir -p /tmp/xctrace-build && cd /tmp/xctrace-build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu)
-	codesign -s - -f --entitlements entitlements.plist /tmp/xctrace-build/binary
-	xctrace record --template 'Leaks' --time-limit 5s --launch -- /tmp/xctrace-build/binary
-	@echo "Trace saved. Open the .trace file with: open Launch_binary_*.trace"
-
-##############################
 
 .PHONY: test
 test:
