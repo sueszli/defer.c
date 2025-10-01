@@ -37,7 +37,6 @@ docker-clean:
 run:
 	mkdir -p /tmp/build && cd /tmp/build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && MallocStackLogging=1 MALLOC_PROTECT_BEFORE=1 DYLD_INSERT_LIBRARIES=/usr/lib/libgmalloc.dylib ./defer
 
-
 # also try: Instruments
 .PHONY: leaks
 leaks:
