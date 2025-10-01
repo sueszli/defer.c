@@ -34,7 +34,7 @@ docker-clean:
 
 .PHONY: run
 run: fmt lint
-	mkdir -p /tmp/build && cd /tmp/build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && ASAN_OPTIONS=detect_leaks=1:halt_on_error=0:leak_check_at_exit=1:print_stats=1:print_legend=1:atexit=1 ./binary
+	mkdir -p /tmp/build && cd /tmp/build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && ASAN_OPTIONS=detect_leaks=1 ./binary
 
 .PHONY: run-gmalloc
 run-gmalloc: fmt lint

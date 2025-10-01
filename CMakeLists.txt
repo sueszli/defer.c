@@ -80,10 +80,8 @@ endif()
 #
 
 if(NOT DISABLE_ASAN)
-  # only works on apple silicon if clang is installed via homebrew `brew install llvm` and path is set accordingly (see: https://clang.llvm.org/docs/AddressSanitizer.html#apple)
-  #
-  # also includes `-fsanitize=leak`
-  add_compile_options(-fsanitize=address -fsanitize-address-use-after-scope -fno-omit-frame-pointer -g)
+  # apple silicon: requires clang from homebrew `brew install llvm` with paths set accordingly: https://clang.llvm.org/docs/AddressSanitizer.html#apple
+  add_compile_options(-fsanitize=address -fsanitize-address-use-after-scope -fno-omit-frame-pointer -g) # also includes `-fsanitize=leak`
   add_link_options(-fsanitize=address)
 endif()
 
