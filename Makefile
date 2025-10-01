@@ -1,5 +1,5 @@
 # 
-# containerized development
+# docker container
 # 
 
 DOCKER_RUN = docker run --rm -v $(PWD):/workspace main sh -c
@@ -29,7 +29,7 @@ docker-clean:
 	docker rmi main
 
 # 
-# apple silicon development
+# apple silicon
 # 
 
 .PHONY: run
