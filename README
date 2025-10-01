@@ -8,18 +8,12 @@ $ toilet -f mono12 "defer.c"
 ▀██▄▄███  ▀██▄▄▄▄█    ██      ▀██▄▄▄▄█   ██          ██     ▀██▄▄▄▄█ 
   ▀▀▀ ▀▀    ▀▀▀▀▀     ▀▀        ▀▀▀▀▀    ▀▀          ▀▀       ▀▀▀▀▀  
 
-inspired by: https://github.com/moon-chilled/Defer
+inspired by:
+
+- https://github.com/moon-chilled/Defer
+- https://oshub.org/projects/retros-32/posts/defer-resource-cleanup-in-c-with-gccs-magic
 
 
-# setting flags correctly in cmake: https://github.com/pytorch/pytorch/blob/264e7f68a095b5b2f10e7ca66a3bbb16f6e56e28/CMakeLists.txt#L1043
+also import unit test stuff
 
-todo:
-
-```
-# add valgrind (requires disabling asan)
-
-option(DISABLE_ASAN "Disable AddressSanitizer" OFF)
-if(NOT DISABLE_ASAN)
-    set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -fsanitize=address")
-endif()
-```
+also add `make run-local-gcc` and `make run-local-clang` targets to Makefile. try to find some valgrind alternative that runs on macos, so i won't need docker to run stuff on my local machine.

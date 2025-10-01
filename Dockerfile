@@ -3,6 +3,7 @@ FROM --platform=linux/amd64 ubuntu:24.04
 RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc-14 g++-14 \
     clang-19 \
+    libclang-rt-19-dev \
     cmake make \
     valgrind \
     && update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-14 100 \

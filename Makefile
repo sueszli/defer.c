@@ -12,6 +12,10 @@ run-gcc: build-image
 run-clang: build-image
 	$(DOCKER_RUN) "mkdir -p /tmp/clang-build && cd /tmp/clang-build && cmake -DCMAKE_C_COMPILER=clang /workspace && make && ./demo"
 
+.PHONY: run-valgrind
+run-valgrind: build-image
+	$(DOCKER_RUN) "mkdir -p /tmp/valgrind-build && cd /tmp/valgrind-build && cmake -DDISABLE_ASAN=ON /workspace && make && valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./demo"
+
 .PHONY: fmt
 fmt:
 	uvx --from cmakelang cmake-format --dangle-parens --line-width 120 -i CMakeLists.txt

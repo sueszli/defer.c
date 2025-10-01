@@ -12,8 +12,9 @@ if(CMAKE_C_COMPILER_ID MATCHES "Clang" AND CMAKE_C_COMPILER_VERSION VERSION_LESS
 endif()
 
 #
-# compiler hardening see:
-# https://github.com/ossf/wg-best-practices-os-developers/blob/main/docs/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C%2B%2B.md
+# compiler hardening
+#
+# see: https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++
 #
 
 add_compile_options(
@@ -42,16 +43,12 @@ add_compile_options(
   -fPIE
 )
 
-# build mode specific
 if(CMAKE_BUILD_TYPE STREQUAL "Release")
   add_compile_options(
     -fno-delete-null-pointer-checks -fno-strict-overflow -fno-strict-aliasing -ftrivial-auto-var-init=zero
   )
-else()
-  add_compile_options(-Werror)
 endif()
 
-# os specific
 if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   add_compile_options(-fstack-clash-protection)
   add_link_options(
@@ -65,21 +62,28 @@ if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
   )
 endif()
 
-# compiler specific
 if(CMAKE_C_COMPILER_ID MATCHES "GNU")
-  # from gcc-15 add `-fzero-init-padding-bits=all`
+  # add `-fzero-init-padding-bits=all` from gcc 15
   add_compile_options(-Wtrampolines -Wbidi-chars=any)
 endif()
 if(CMAKE_C_COMPILER_ID MATCHES "Clang")
   # nop
 endif()
 
-# architecture specific
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|i686|i386")
   add_compile_options(-fcf-protection=full)
 endif()
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|ARM64")
   add_compile_options(-mbranch-protection=standard)
+endif()
+
+#
+# sanitizers
+#
+
+if(NOT DISABLE_ASAN)
+  add_compile_options(-fsanitize=address -fsanitize-address-use-after-scope -fno-omit-frame-pointer)
+  add_link_options(-fsanitize=address)
 endif()
 
 #
