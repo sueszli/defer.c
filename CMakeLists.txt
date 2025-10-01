@@ -92,15 +92,6 @@ if(NOT DISABLE_UBSAN)
   add_link_options(-fsanitize=undefined)
 endif()
 
-if(NOT DISABLE_GMALLOC AND (APPLE AND CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|ARM64"))
-  add_custom_target(
-    run-gmalloc
-    COMMAND ${CMAKE_COMMAND} -E env MALLOC_PROTECT_BEFORE=1 MallocStackLogging=1 MallocScribble=1 MallocPreScribble=1 MallocErrorAbort=1 DYLD_INSERT_LIBRARIES=/usr/lib/libgmalloc.dylib $<TARGET_FILE:binary>
-    DEPENDS binary
-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-  )
-endif()
-
 #
 # dependencies
 #
