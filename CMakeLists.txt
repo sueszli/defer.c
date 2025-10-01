@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.27 FATAL_ERROR)
-project(demo LANGUAGES C)
+project(defer LANGUAGES C)
 
 set(CMAKE_C_STANDARD 23)
 set(CMAKE_C_STANDARD_REQUIRED ON)
@@ -90,4 +90,4 @@ endif()
 # sources
 #
 
-add_executable(demo demo.c)
+add_executable(defer defer.c)

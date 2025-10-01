@@ -6,23 +6,23 @@ build-image:
 
 .PHONY: run-gcc
 run-gcc: build-image
-	$(DOCKER_RUN) "mkdir -p /tmp/gcc-build && cd /tmp/gcc-build && cmake -DCMAKE_C_COMPILER=gcc /workspace && make && ./demo"
+	$(DOCKER_RUN) "mkdir -p /tmp/gcc-build && cd /tmp/gcc-build && cmake -DCMAKE_C_COMPILER=gcc /workspace && make && ./defer"
 
 .PHONY: run-clang
 run-clang: build-image
-	$(DOCKER_RUN) "mkdir -p /tmp/clang-build && cd /tmp/clang-build && cmake -DCMAKE_C_COMPILER=clang /workspace && make && ./demo"
+	$(DOCKER_RUN) "mkdir -p /tmp/clang-build && cd /tmp/clang-build && cmake -DCMAKE_C_COMPILER=clang /workspace && make && ./defer"
 
 .PHONY: run-valgrind
 run-valgrind: build-image
-	$(DOCKER_RUN) "mkdir -p /tmp/valgrind-build && cd /tmp/valgrind-build && cmake -DDISABLE_ASAN=ON /workspace && make && valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./demo"
+	$(DOCKER_RUN) "mkdir -p /tmp/valgrind-build && cd /tmp/valgrind-build && cmake -DDISABLE_ASAN=ON /workspace && make && valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./defer"
 
 .PHONY: run-local
 run-local:
-	mkdir -p /tmp/clang-build && cd /tmp/clang-build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && make && ./demo
+	cd $$(mktemp -d) && cmake -DCMAKE_C_COMPILER=clang $(PWD) && make && ./defer
 
 .PHONY: run-local-leaks
 run-local-leaks:
-	mkdir -p /tmp/leaks-build && cd /tmp/leaks-build && cmake -DDISABLE_ASAN=ON $(PWD) && make && leaks --atExit -- ./demo
+	cd $$(mktemp -d) && cmake -DDISABLE_ASAN=ON $(PWD) && make && leaks --atExit -- ./defer
 
 .PHONY: fmt
 fmt:
