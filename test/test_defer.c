@@ -2,13 +2,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-void setUp(void) {
-    // set up code if needed
-}
+void setUp(void) {}
 
-void tearDown(void) {
-    // clean up code if needed
-}
+void tearDown(void) {}
 
 void test_basic_assertion(void) { TEST_ASSERT_TRUE(1); }
 
