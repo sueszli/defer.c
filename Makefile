@@ -29,7 +29,7 @@ docker-clean:
 	docker rmi main
 
 # 
-# local development
+# apple silicon development
 # 
 
 .PHONY: run
