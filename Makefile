@@ -47,11 +47,6 @@ run:
 #   Runtime Detection
 #   - MSan (Memory Sanitizer) - Detects uninitialized memory reads (requires full recompilation of dependencies, challenging but possible)
 
-#   Additional Compiler Flags
-#   - -fsanitize=leak - Standalone leak sanitizer (may work on Apple Silicon where full ASan doesn't)
-#   - -fsanitize=memory - MSan for uninitialized memory
-#   -  -fno-sanitize-recover=all - Make sanitizers abort on first error
-
 .PHONY: leaks
 leaks:
 	mkdir -p /tmp/leaks-build && cd /tmp/leaks-build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu)
