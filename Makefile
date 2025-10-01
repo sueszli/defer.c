@@ -34,13 +34,13 @@ docker-clean:
 
 .PHONY: run
 run:
-	mkdir -p /tmp/build && cd /tmp/build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && ./defer
+	mkdir -p /tmp/build && cd /tmp/build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && MALLOC_PROTECT_BEFORE=1 DYLD_INSERT_LIBRARIES=/usr/lib/libgmalloc.dylib ./defer
 
 .PHONY: leaks
 leaks:
 	mkdir -p /tmp/leaks-build && cd /tmp/leaks-build && cmake -DCMAKE_C_COMPILER=clang -DDISABLE_ASAN=ON $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu)
 	codesign -s - -f --entitlements entitlements.plist /tmp/leaks-build/defer
-	leaks --atExit -- /tmp/leaks-build/defer
+	MallocStackLogging=1 leaks --atExit -- /tmp/leaks-build/defer
 
 .PHONY: instruments
 instruments:
