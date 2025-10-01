@@ -32,10 +32,9 @@ docker-clean:
 # apple silicon development
 # 
 
-# can i somehow add these flags right into cmake?
 .PHONY: run
 run:
-	mkdir -p /tmp/build && cd /tmp/build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && MallocStackLogging=1 MALLOC_PROTECT_BEFORE=1 DYLD_INSERT_LIBRARIES=/usr/lib/libgmalloc.dylib ./defer
+	mkdir -p /tmp/build && cd /tmp/build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && cmake --build . --target run
 
 # also try: Instruments
 .PHONY: leaks
@@ -54,5 +53,5 @@ test:
 
 .PHONY: fmt
 fmt:
-	uvx --from cmakelang cmake-format --dangle-parens --line-width 120 -i CMakeLists.txt
+	uvx --from cmakelang cmake-format --dangle-parens --line-width 500 -i CMakeLists.txt
 	find . -name "*.c" -o -name "*.h" | xargs clang-format -i
