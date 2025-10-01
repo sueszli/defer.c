@@ -36,13 +36,12 @@ docker-clean:
 run:
 	mkdir -p /tmp/build && cd /tmp/build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && ./defer
 
-# On Apple Silicon, leaks requires code signing with debug entitlement
+# what the actual fuck is happening here??????
+# leaks requires code signing with debug entitlement on Apple Silicon
 .PHONY: leaks
 leaks:
 	mkdir -p /tmp/leaks-build && cd /tmp/leaks-build && \
-	echo '<?xml version="1.0" encoding="UTF-8"?>' > entitlements.plist && \
-	echo '<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">' >> entitlements.plist && \
-	echo '<plist version="1.0"><dict><key>com.apple.security.get-task-allow</key><true/></dict></plist>' >> entitlements.plist && \
+	printf '<?xml version="1.0" encoding="UTF-8"?>\n<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">\n<plist version="1.0"><dict><key>com.apple.security.get-task-allow</key><true/></dict></plist>' > entitlements.plist && \
 	cmake -DDISABLE_ASAN=ON $(PWD) && \
 	cmake --build . -j$$(sysctl -n hw.ncpu) && \
 	codesign -s - -f --entitlements entitlements.plist ./defer && \
