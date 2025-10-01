@@ -91,12 +91,18 @@ endif()
 
 if(NOT DISABLE_GMALLOC AND (APPLE AND CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|arm64|ARM64"))
   add_custom_target(
-    run
-    COMMAND ${CMAKE_COMMAND} -E env MallocStackLogging=1 MALLOC_PROTECT_BEFORE=1 MallocScribble=1 MallocPreScribble=1 MallocErrorAbort=1 DYLD_INSERT_LIBRARIES=/usr/lib/libgmalloc.dylib $<TARGET_FILE:defer>
-    DEPENDS defer
+    run-gmalloc
+    COMMAND ${CMAKE_COMMAND} -E env MallocStackLogging=1 MALLOC_PROTECT_BEFORE=1 MallocScribble=1 MallocPreScribble=1 MallocErrorAbort=1 DYLD_INSERT_LIBRARIES=/usr/lib/libgmalloc.dylib $<TARGET_FILE:binary>
+    DEPENDS binary
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
   )
 endif()
+
+#
+# static analysis
+#
+
+# find_program(CPPCHECK cppcheck) if(NOT DISABLE_CPPCHECK) add_custom_target( cppcheck COMMAND ${CPPCHECK} --enable=all --std=c23 -D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS --suppress=missingIncludeSystem --suppress=checkersReport --check-level=exhaustive ${CMAKE_SOURCE_DIR}/src/ WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} ) endif()
 
 #
 # dependencies
@@ -140,7 +146,11 @@ endif()
 # sources
 #
 
-add_executable(defer src/defer.c)
+add_executable(binary src/main.c)
+
+#
+# tests
+#
 
 file(GLOB_RECURSE TEST_FILES test/*.c)
 

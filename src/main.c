@@ -33,17 +33,22 @@ int main(void) {
 
     // char *overflow = malloc(10);
     // overflow[10] = 'x';  // one byte past the allocation
-    
+
     // char *underflow = malloc(10);
     // underflow[-1] = 'y';  // one byte before the allocation
-    
+
     // char *dangling = malloc(50);
     // free(dangling);
     // dangling[0] = 'z';  // accessing freed memory
-    
+
     // char *doublefree = malloc(50);
     // free(doublefree);
     // free(doublefree);  // freeing the same pointer twice
+
+    // int arr[10];
+    // arr[10] = 100;
+
+    // sleep(1);
 
     return EXIT_SUCCESS;
 }
