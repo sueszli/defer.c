@@ -24,6 +24,14 @@ run-local:
 run-local-leaks:
 	cd $$(mktemp -d) && cmake -DDISABLE_ASAN=ON $(PWD) && make && leaks --atExit -- ./defer
 
+.PHONY: test
+test: build-image
+	$(DOCKER_RUN) "mkdir -p /tmp/test-build && cd /tmp/test-build && cmake -DBUILD_TESTS=ON /workspace && make && ctest --output-on-failure"
+
+.PHONY: test-local
+test-local:
+	cd $$(mktemp -d) && cmake -DBUILD_TESTS=ON $(PWD) && make && ctest --output-on-failure
+
 .PHONY: fmt
 fmt:
 	uvx --from cmakelang cmake-format --dangle-parens --line-width 120 -i CMakeLists.txt
