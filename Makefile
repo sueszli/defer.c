@@ -36,6 +36,7 @@ docker-clean:
 run:
 	mkdir -p /tmp/build && cd /tmp/build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && ./defer
 
+# wtf is happening here? why do i need to sign the binary to use leaks???
 .PHONY: leaks
 leaks:
 	mkdir -p /tmp/leaks-build && cd /tmp/leaks-build && \
