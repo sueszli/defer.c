@@ -15,5 +15,3 @@ inspired by:
 
 
 also import unit test stuff
-
-also add `make run-local-gcc` and `make run-local-clang` targets to Makefile. try to find some valgrind alternative that runs on macos, so i won't need docker to run stuff on my local machine.
