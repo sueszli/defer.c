@@ -36,6 +36,8 @@ docker-clean:
 run:
 	mkdir -p /tmp/build && cd /tmp/build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && cmake --build . --target run
 
+##############################
+
 .PHONY: leaks
 leaks:
 	mkdir -p /tmp/leaks-build && cd /tmp/leaks-build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu)
@@ -54,6 +56,8 @@ xctrace:
 	mkdir -p /tmp/xctrace-build && cd /tmp/xctrace-build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu)
 	codesign -s - -f --entitlements entitlements.plist /tmp/xctrace-build/defer
 	xctrace record --template 'Leaks' --launch -- /tmp/xctrace-build/defer
+
+##############################
 
 .PHONY: test
 test:
