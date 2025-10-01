@@ -8,6 +8,8 @@ $ toilet -f mono12 "defer.c"
 ▀██▄▄███  ▀██▄▄▄▄█    ██      ▀██▄▄▄▄█   ██          ██     ▀██▄▄▄▄█ 
   ▀▀▀ ▀▀    ▀▀▀▀▀     ▀▀        ▀▀▀▀▀    ▀▀          ▀▀       ▀▀▀▀▀  
 
+a header-only C library for RAII-style resource management in C.
+
 inspired by:
 
 - https://github.com/moon-chilled/Defer
