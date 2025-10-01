@@ -33,13 +33,13 @@ docker-clean:
 # 
 
 .PHONY: run
-run:
+run: fmt lint
 	mkdir -p /tmp/build && cd /tmp/build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && cmake --build . --target run-gmalloc
 
 ##############################
 
 # am i using leaks correctly?
-# static analysis: cppcheck, Clang Static Analyzer
+# how to use xctrace correctly?
 
 .PHONY: leaks
 leaks:
