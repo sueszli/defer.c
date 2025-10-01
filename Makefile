@@ -34,19 +34,23 @@ docker-clean:
 
 .PHONY: run
 run:
-	mkdir -p /tmp/local-build && cd /tmp/local-build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && ./defer
+	mkdir -p /tmp/build && cd /tmp/build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && ./defer
 
 .PHONY: leaks
 leaks:
-	mkdir -p /tmp/local-leaks-build && cd /tmp/local-leaks-build && \
-	echo '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><key>com.apple.security.get-task-allow</key><true/></dict></plist>' > entitlements.plist && \
-	cmake -DDISABLE_ASAN=ON $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && \
-	codesign -s - -f --entitlements entitlements.plist ./defer && \
+	mkdir -p /tmp/leaks-build && cd /tmp/leaks-build
+
+	echo '<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd"><plist version="1.0"><dict><key>com.apple.security.get-task-allow</key><true/></dict></plist>' > entitlements.plist
+
+	cmake -DDISABLE_ASAN=ON $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu)
+	
+	codesign -s - -f --entitlements entitlements.plist ./defer
+
 	leaks --atExit -- ./defer
 
 .PHONY: test
 test:
-	mkdir -p /tmp/local-test-build && cd /tmp/local-test-build && cmake -DBUILD_TESTS=ON $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && ctest --output-on-failure
+	mkdir -p /tmp/test-build && cd /tmp/test-build && cmake -DBUILD_TESTS=ON $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && ctest --output-on-failure
 
 # 
 # utils
