@@ -34,21 +34,21 @@ docker-clean:
 
 .PHONY: run
 run:
-	mkdir -p /tmp/build && cd /tmp/build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && ASAN_OPTIONS=detect_leaks=1 ./binary
+	mkdir -p /tmp/build && cd /tmp/build && cmake $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && ASAN_OPTIONS=detect_leaks=1 ./binary
 
 .PHONY: run-gmalloc
 run-gmalloc:
-	mkdir -p /tmp/gmalloc-build && cd /tmp/gmalloc-build && cmake -DCMAKE_C_COMPILER=clang -DDISABLE_ASAN=ON $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && MALLOC_PROTECT_BEFORE=1 MallocStackLogging=1 MallocScribble=1 MallocPreScribble=1 MallocErrorAbort=1 DYLD_INSERT_LIBRARIES=/usr/lib/libgmalloc.dylib ./binary
+	mkdir -p /tmp/gmalloc-build && cd /tmp/gmalloc-build && cmake -DDISABLE_ASAN=ON $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && MALLOC_PROTECT_BEFORE=1 MallocStackLogging=1 MallocScribble=1 MallocPreScribble=1 MallocErrorAbort=1 DYLD_INSERT_LIBRARIES=/usr/lib/libgmalloc.dylib ./binary
 
 .PHONY: leaks
 leaks:
-	mkdir -p /tmp/leaks-build && cd /tmp/leaks-build && cmake -DCMAKE_C_COMPILER=clang -DDISABLE_ASAN=ON $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu)
+	mkdir -p /tmp/leaks-build && cd /tmp/leaks-build && cmake -DDISABLE_ASAN=ON $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu)
 	codesign -s - -f --entitlements entitlements.plist /tmp/leaks-build/binary
 	leaks --atExit --list --groupByType -- /tmp/leaks-build/binary
 
 .PHONY: test
 test:
-	mkdir -p /tmp/test-build && cd /tmp/test-build && cmake -DCMAKE_C_COMPILER=clang -DBUILD_TESTS=ON $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && ctest --output-on-failure
+	mkdir -p /tmp/test-build && cd /tmp/test-build && cmake -DBUILD_TESTS=ON $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && ctest --output-on-failure
 
 # 
 # utils
