@@ -52,9 +52,9 @@ test:
 
 .PHONY: lint
 lint:
-	cppcheck --enable=all --std=c23 --language=c --suppress=missingIncludeSystem --suppress=checkersReport --check-level=exhaustive --inconclusive -I src/ src/
+	@cppcheck --enable=all --std=c23 --language=c --suppress=missingIncludeSystem --suppress=checkersReport --check-level=exhaustive --inconclusive -I src/ src/
 
 .PHONY: fmt
 fmt:
-	uvx --from cmakelang cmake-format --dangle-parens --line-width 500 -i CMakeLists.txt
-	find . -name "*.c" -o -name "*.h" | xargs clang-format -i
+	@uvx --from cmakelang cmake-format --dangle-parens --line-width 500 -i CMakeLists.txt
+	@find . -name "*.c" -o -name "*.h" | xargs clang-format -i
