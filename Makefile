@@ -38,6 +38,10 @@ run:
 
 ##############################
 
+# also add lsan?
+# am i using leaks correctly?
+# static analysis: cppcheck, clang analyze, scan-build
+
 .PHONY: leaks
 leaks:
 	mkdir -p /tmp/leaks-build && cd /tmp/leaks-build && cmake -DCMAKE_C_COMPILER=clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu)

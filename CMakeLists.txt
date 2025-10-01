@@ -99,12 +99,6 @@ if(NOT DISABLE_GMALLOC AND (APPLE AND CMAKE_SYSTEM_PROCESSOR MATCHES "aarch64|ar
 endif()
 
 #
-# static analysis
-#
-
-# find_program(CPPCHECK cppcheck) if(NOT DISABLE_CPPCHECK) add_custom_target( cppcheck COMMAND ${CPPCHECK} --enable=all --std=c23 -D_FORTIFY_SOURCE=3 -D_GLIBCXX_ASSERTIONS --suppress=missingIncludeSystem --suppress=checkersReport --check-level=exhaustive ${CMAKE_SOURCE_DIR}/src/ WORKING_DIRECTORY ${CMAKE_SOURCE_DIR} ) endif()
-
-#
 # dependencies
 #
 
