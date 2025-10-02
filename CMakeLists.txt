@@ -65,7 +65,7 @@ if(CMAKE_C_COMPILER_ID MATCHES "GNU")
   add_compile_options(-Wtrampolines -Wbidi-chars=any)
 endif()
 if(CMAKE_C_COMPILER_ID MATCHES "Clang")
-  # nop
+  add_compile_options(-fblocks) # defer.h implementation specific
 endif()
 
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64|i686|i386")
@@ -133,6 +133,10 @@ endif()
 #
 
 add_executable(binary src/main.c)
+
+if(CMAKE_C_COMPILER_ID MATCHES "Clang")
+  target_link_libraries(binary PRIVATE BlocksRuntime) # defer.h implementation specific
+endif()
 
 #
 # tests

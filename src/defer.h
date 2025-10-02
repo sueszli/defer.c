@@ -12,8 +12,11 @@
 //
 
 #if defined(__clang__)
+
+static inline void __defer_cleanup__(void (^*b)(void)) { (*b)(); }
+
 #define defer(block) \
-    do { assert(0 && "to be implemented"); } while(0)
+    void (^UNIQUE_NAME(__defer_var_))(void) __attribute__((cleanup(__defer_cleanup__))) = ^block
 
 // 
 // gnu

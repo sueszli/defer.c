@@ -4,6 +4,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     gcc-14 g++-14 \
     clang-19 \
     libclang-rt-19-dev \
+    libblocksruntime-dev \
     cmake make \
     git \
     ca-certificates \
