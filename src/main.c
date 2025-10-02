@@ -4,14 +4,12 @@
 #include <unistd.h>
 
 int main(void) {
-
-    char *mem = malloc(100000);
+    char *mem = malloc(100);
     defer({
         free(mem);
-        printf("freed mem\n");
+        printf("mem freed\n");
     });
 
-    printf("allocated mem\n");
-
+    printf("mem allocated\n");
     return EXIT_SUCCESS;
 }

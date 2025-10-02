@@ -1,5 +1,3 @@
-$ toilet -f mono12 "defer.c"
-
       ▄▄               ▄▄▄▄                                          
       ██              ██▀▀▀                                          
  ▄███▄██   ▄████▄   ███████    ▄████▄    ██▄████             ▄█████▄ 
@@ -8,23 +6,47 @@ $ toilet -f mono12 "defer.c"
 ▀██▄▄███  ▀██▄▄▄▄█    ██      ▀██▄▄▄▄█   ██          ██     ▀██▄▄▄▄█ 
   ▀▀▀ ▀▀    ▀▀▀▀▀     ▀▀        ▀▀▀▀▀    ▀▀          ▀▀       ▀▀▀▀▀  
 
-a tiny header-only C library for scope-based resource management through execution deferral.
+a tiny header-only C library for a scope-based cleanup helper
 
-inspired by:
+# demo
 
-- https://fdiv.net/2015/10/08/emulating-defer-c-clang-or-gccblocks
-- https://gist.github.com/eloraiby/f64fcba0d489f0d31aa544d66cbfd7a6
+$ tail -n +6 src/main.c
 
+```
+int main(void) {
+    char *mem = malloc(100);
+    defer({
+        free(mem);
+        printf("mem freed\n");
+    });
 
-
-$ tail -n +5 src/main.c
+    printf("mem allocated\n");
+    return EXIT_SUCCESS;
+}
+```
 
 $ make run
 
+```
+mem allocated
+mem freed
+```
+
 $ make docker-gcc-test
+
+```
+...
+100% tests passed, 0 tests failed out of 1
+```
 
 $ make docker-clang-test
 
+```
+...
+100% tests passed, 0 tests failed out of 1
+```
+
+# limitations
 
 LIMITATIONS AND EDGE CASES
 
@@ -174,3 +196,13 @@ PORTABILITY NOTES:
 For production use, weigh these limitations against the benefits of automatic cleanup.
 The implementation is well-suited for GCC/Clang-only projects that need RAII-like semantics
 in C, but should be used with full understanding of its constraints.
+
+
+# References
+
+- https://thephd.dev/_vendor/future_cxx/technical%20specification/C%20-%20defer/C%20-%20defer%20Technical%20Specification.pdf
+- https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/cleanup.h
+- https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2895.htm
+- https://thephd.dev/c2y-the-defer-technical-specification-its-time-go-go-go
+- https://fdiv.net/2015/10/08/emulating-defer-c-clang-or-gccblocks
+- https://gist.github.com/eloraiby/f64fcba0d489f0d31aa544d66cbfd7a6
