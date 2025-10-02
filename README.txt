@@ -113,6 +113,8 @@ GOOD: defer({ printf("1"); });
 
 # references
 
+interesting reads and alternative implementations, each with their own caveats:
+
 - https://thephd.dev/_vendor/future_cxx/technical%20specification/C%20-%20defer/C%20-%20defer%20Technical%20Specification.pdf
 - https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/include/linux/cleanup.h
 - https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2895.htm
