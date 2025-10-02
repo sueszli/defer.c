@@ -88,7 +88,7 @@ BAD: int *data = malloc(100);
 
 (7) signal handlers (signals, abort, _exit) are not supported.
 
-(8) `goto` statements behave counterintuitively. jumping OVER a defer block means it never executes. jumping OUT OF a defer scope will execute the defer (as expected).
+(8) `goto` statements behave counterintuitively. jumping OVER a defer block means it never gets executes. jumping OUT OF a defer scope will execute the defer (as expected).
 
 ```
 BAD: goto skip;
