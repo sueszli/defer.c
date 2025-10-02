@@ -20,9 +20,13 @@ docker-clang:
 docker-valgrind:
 	$(DOCKER_RUN) "mkdir -p /tmp/valgrind-build && cd /tmp/valgrind-build && cmake -DCMAKE_C_COMPILER=gcc -DDISABLE_ASAN=ON /workspace && cmake --build . -j$$(nproc) && valgrind --leak-check=full --show-leak-kinds=all --track-origins=yes ./binary"
 
-.PHONY: docker-test
-docker-test:
-	$(DOCKER_RUN) "mkdir -p /tmp/test-build && cd /tmp/test-build && cmake -DCMAKE_C_COMPILER=gcc -DBUILD_TESTS=ON /workspace && cmake --build . -j$$(nproc) && ctest --output-on-failure"
+.PHONY: docker-gcc-test
+docker-gcc-test:
+	$(DOCKER_RUN) "mkdir -p /tmp/gcc-test-build && cd /tmp/gcc-test-build && cmake -DCMAKE_C_COMPILER=gcc -DBUILD_TESTS=ON /workspace && cmake --build . -j$$(nproc) && ctest --output-on-failure"
+
+.PHONY: docker-clang-test
+docker-clang-test:
+	$(DOCKER_RUN) "mkdir -p /tmp/clang-test-build && cd /tmp/clang-test-build && cmake -DCMAKE_C_COMPILER=clang -DBUILD_TESTS=ON /workspace && cmake --build . -j$$(nproc) && ctest --output-on-failure"
 
 .PHONY: docker-clean
 docker-clean:

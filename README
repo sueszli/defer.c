@@ -8,11 +8,19 @@ $ toilet -f mono12 "defer.c"
 ▀██▄▄███  ▀██▄▄▄▄█    ██      ▀██▄▄▄▄█   ██          ██     ▀██▄▄▄▄█ 
   ▀▀▀ ▀▀    ▀▀▀▀▀     ▀▀        ▀▀▀▀▀    ▀▀          ▀▀       ▀▀▀▀▀  
 
-a header-only C library for RAII-style resource management in C.
+a tiny header-only C library for scope-based resource management through execution deferral.
 
 inspired by:
 
-- https://github.com/moon-chilled/Defer
-- https://oshub.org/projects/retros-32/posts/defer-resource-cleanup-in-c-with-gccs-magic
 - https://fdiv.net/2015/10/08/emulating-defer-c-clang-or-gccblocks
 - https://gist.github.com/eloraiby/f64fcba0d489f0d31aa544d66cbfd7a6
+
+
+
+$ tail -n +5 src/main.c
+
+$ make run
+
+$ make docker-gcc-test
+
+$ make docker-clang-test
