@@ -10,8 +10,6 @@ a tiny, portable, header-only C library for a scope-based cleanup (RAII-like sem
 
 works both with gcc and clang (with `BlocksRuntime` on linux).
 
-# demo
-
 ```
 $ tail -n +6 src/main.c
 
@@ -38,6 +36,7 @@ $ make docker-gcc-test
 $ make docker-clang-test
 
     100% tests passed, 0 tests failed out of 1
+```
 
 # limitations
 
