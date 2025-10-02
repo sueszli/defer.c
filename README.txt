@@ -38,7 +38,6 @@ $ make docker-gcc-test
 $ make docker-clang-test
 
     100% tests passed, 0 tests failed out of 1
-```
 
 # limitations
 
