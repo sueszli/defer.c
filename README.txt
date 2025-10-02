@@ -8,7 +8,7 @@
 
 a tiny, portable, header-only C library for a scope-based cleanup (RAII-like semantics).
 
-works both with gcc and clang (with `BlocksRuntime` on Linux).
+works both with gcc and clang (with `BlocksRuntime` on linux).
 
 # demo
 
@@ -98,7 +98,7 @@ BAD: goto skip;
      skip:
 ```
 
-(9) defer blocks are executed in LIFO order (matching Go's defer behavior)
+(9) defer blocks are executed in LIFO order (matching Go's defer behavior). defer executes AFTER return value is computed but BEFORE function exits.
 
 ```
 GOOD: defer({ printf("1"); });
@@ -109,30 +109,7 @@ GOOD: defer({ printf("1"); });
 
 (10) defer scopes are created by curly braces `{}`. each scope has its own defer blocks. this includes function bodies, loops, and conditional blocks.
 
-(11) VARIABLE LIFETIME
-    - Variables captured by defer must outlive the defer's execution
-    - Pointers to local variables become invalid if passed to outer scope defers
-    - In Clang, blocks capture variables when declared, not when executed
-
-(12) THREAD SAFETY
-    - defer itself provides no thread synchronization
-    - If defer modifies shared state, proper locking is required
-    - Multiple threads can safely use defer for thread-local resources
-
-(13) RETURN VALUE INTERACTION
-    - defer cannot modify function return values
-    - defer executes AFTER return value is computed but BEFORE function exits
-    - This is the same behavior as Go's defer
-
-(14) PERFORMANCE CONSIDERATIONS
-    - Each defer creates stack overhead (cleanup function + variable)
-    - Clang blocks may have additional runtime overhead (BlocksRuntime library)
-    - For tight loops, excessive defer usage may impact performance
-
-(15) NESTED DEFER COMPLEXITY
-    - Complex nesting with multiple scopes can make control flow harder to follow
-    - Execution order may be non-obvious with deep nesting
-    - Keep defer usage simple and well-commented
+(11) variables captured by defer block must outlive the defer's execution.
 
 # references
 
