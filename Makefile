@@ -33,7 +33,7 @@ docker-clean:
 # 
 
 .PHONY: run
-run: lint fmt
+run:
 	mkdir -p /tmp/build && cd /tmp/build && cmake -DCMAKE_C_COMPILER=/opt/homebrew/opt/llvm/bin/clang $(PWD) && cmake --build . -j$$(sysctl -n hw.ncpu) && ASAN_OPTIONS=detect_leaks=1 LSAN_OPTIONS=suppressions=$(PWD)/suppr.txt ./binary
 
 .PHONY: run-gmalloc

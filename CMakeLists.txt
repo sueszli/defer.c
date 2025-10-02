@@ -134,7 +134,7 @@ endif()
 
 add_executable(binary src/main.c)
 
-if(CMAKE_C_COMPILER_ID MATCHES "Clang")
+if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_C_COMPILER_ID MATCHES "Clang")
   target_link_libraries(binary PRIVATE BlocksRuntime) # defer.h implementation specific
 endif()
 
