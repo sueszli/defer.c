@@ -24,3 +24,153 @@ $ make run
 $ make docker-gcc-test
 
 $ make docker-clang-test
+
+
+LIMITATIONS AND EDGE CASES
+
+This implementation leverages compiler-specific cleanup attributes to provide Go-like defer
+semantics in C. While powerful, there are important limitations and edge cases to be aware of:
+
+1. COMPILER SUPPORT
+   - Only GCC (14.0+) and Clang (16.0+) are supported
+   - MSVC and other compilers will trigger a compile-time assertion
+   - Implementation differs significantly between GCC and Clang
+
+2. MULTIPLE DEFERS ON SAME LINE (CRITICAL)
+   - The UNIQUE_NAME macro uses __LINE__ for name generation
+   - Multiple defer statements on the same line will cause name collisions
+   - WORKAROUND: Always place defer statements on separate lines
+
+   BAD:  defer({ cleanup_a(); }); defer({ cleanup_b(); });
+   GOOD: defer({ cleanup_a(); });
+         defer({ cleanup_b(); });
+
+3. VARIABLE CAPTURE (CLANG-SPECIFIC)
+   - Clang requires __block qualifier for variables modified in defer blocks
+   - Without __block, you'll get "variable is not assignable" errors
+   - GCC does not need __block (direct scope access)
+
+   Example:
+     __block int counter = 0;  // Required for Clang
+     defer({ counter++; });
+
+4. ARRAY CAPTURE (CLANG LIMITATION)
+   - Arrays cannot be captured in Clang blocks, even with __block
+   - Error: "cannot refer to declaration with an array type inside block"
+   - WORKAROUND: Use a pointer to the array instead
+
+   BAD:  int arr[3] = {1, 2, 3};
+         defer({ arr[0] = 0; });  // ERROR in Clang
+
+   GOOD: int arr[3] = {1, 2, 3};
+         int *p = arr;
+         defer({ p[0] = 0; });    // OK
+
+5. VARIABLE NAME COLLISIONS (GCC-SPECIFIC)
+   - The GCC implementation uses a cleanup function with a parameter named 'ptr'
+   - Local variables named 'ptr' inside defer blocks may cause shadowing warnings
+   - WORKAROUND: Avoid naming variables 'ptr' in defer blocks or use different names
+
+6. COMMA OPERATOR IN DEFER BLOCKS
+   - Commas are interpreted as macro argument separators by the preprocessor
+   - Using comma operator will cause "macro passed N arguments, but takes just 1" errors
+   - WORKAROUND: Use semicolons instead
+
+   BAD:  defer({ a = 1, b = 2; });      // ERROR: comma seen as separator
+   GOOD: defer({ a = 1; b = 2; });      // OK: semicolon separates statements
+
+7. NON-LOCAL JUMPS (DANGEROUS - CLEANUP BYPASSED)
+   - setjmp/longjmp bypasses cleanup attributes entirely
+   - Deferred cleanup WILL NOT EXECUTE after longjmp
+   - This can lead to resource leaks (memory, file handles, locks, etc.)
+   - There is NO WORKAROUND - cleanup attributes are not longjmp-aware
+
+   NEVER use defer with setjmp/longjmp:
+     int *data = malloc(100);
+     defer({ free(data); });
+
+     if (setjmp(buf)) {
+         // Jumped here - defer DID NOT execute, data is leaked!
+         return;
+     }
+
+8. SIGNAL HANDLERS
+   - Abnormal process termination (signals, abort, _exit) may skip cleanup
+   - defer is designed for normal control flow only
+   - Not a replacement for atexit() or signal-safe cleanup
+
+9. GOTO STATEMENTS
+   - goto jumping OVER a defer declaration means defer never executes
+   - goto jumping OUT OF a defer scope will execute the defer (as expected)
+
+   Example - defer skipped:
+     goto skip;
+     defer({ cleanup(); });  // NEVER executes
+     skip:
+
+10. EXECUTION ORDER
+    - Defers execute in LIFO order (Last In, First Out)
+    - Inner scopes execute before outer scopes
+    - This matches Go's defer behavior
+
+    Example:
+      defer({ printf("1"); });
+      defer({ printf("2"); });
+      defer({ printf("3"); });
+      // Prints: "321"
+
+11. SCOPE BINDING
+    - defer is bound to the enclosing scope where it's declared
+    - Each loop iteration creates a new scope with its own defer
+    - Conditional blocks (if/else) create separate defer scopes
+
+12. VARIABLE LIFETIME
+    - Variables captured by defer must outlive the defer's execution
+    - Pointers to local variables become invalid if passed to outer scope defers
+    - In Clang, blocks capture variables when declared, not when executed
+
+13. THREAD SAFETY
+    - defer itself provides no thread synchronization
+    - If defer modifies shared state, proper locking is required
+    - Multiple threads can safely use defer for thread-local resources
+
+14. RETURN VALUE INTERACTION
+    - defer cannot modify function return values
+    - defer executes AFTER return value is computed but BEFORE function exits
+    - This is the same behavior as Go's defer
+
+15. PERFORMANCE CONSIDERATIONS
+    - Each defer creates stack overhead (cleanup function + variable)
+    - Clang blocks may have additional runtime overhead (BlocksRuntime library)
+    - For tight loops, excessive defer usage may impact performance
+
+16. NESTED DEFER COMPLEXITY
+    - Complex nesting with multiple scopes can make control flow harder to follow
+    - Execution order may be non-obvious with deep nesting
+    - Keep defer usage simple and well-commented
+
+17. DEBUGGING
+    - Debugger stepping may be confusing due to cleanup execution
+    - Breakpoints in defer blocks may fire during scope exit, not declaration
+    - Error messages may reference generated macro names (__defer_var_NNN)
+
+BEST PRACTICES:
+
+1. Use defer primarily for resource cleanup (malloc/free, open/close, lock/unlock)
+2. Keep defer blocks simple - just cleanup code
+3. Always use __block for mutable variables in Clang builds
+4. Avoid defer with setjmp/longjmp entirely
+5. Test thoroughly on both GCC and Clang if targeting both
+6. Document defer usage in complex functions
+7. Consider alternatives (explicit cleanup) if edge cases apply
+
+PORTABILITY NOTES:
+
+- Code using defer is NOT portable to non-GCC/Clang compilers
+- Consider #ifdef guards if targeting multiple compilers
+- The __block keyword is Clang-specific (define as empty macro for GCC)
+- BlocksRuntime library required on Linux with Clang
+
+For production use, weigh these limitations against the benefits of automatic cleanup.
+The implementation is well-suited for GCC/Clang-only projects that need RAII-like semantics
+in C, but should be used with full understanding of its constraints.
