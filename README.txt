@@ -8,7 +8,7 @@
 
 a tiny, portable, header-only C library for a scope-based cleanup (RAII-like semantics).
 
-works both with gcc and clang (with BlocksRuntime on Linux).
+works both with gcc and clang (with `BlocksRuntime` on Linux).
 
 # demo
 
