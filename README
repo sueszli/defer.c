@@ -48,6 +48,8 @@ $ make docker-clang-test
 
 # limitations
 
+there have been plenty of other attempts to 
+
 LIMITATIONS AND EDGE CASES
 
 This implementation leverages compiler-specific cleanup attributes to provide Go-like defer
