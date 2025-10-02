@@ -156,6 +156,10 @@ if(BUILD_TESTS)
     target_link_libraries(${TEST_EXECUTABLE} PRIVATE unity)
     target_include_directories(${TEST_EXECUTABLE} PRIVATE ${unity_SOURCE_DIR}/src)
 
+    if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_C_COMPILER_ID MATCHES "Clang")
+      target_link_libraries(${TEST_EXECUTABLE} PRIVATE BlocksRuntime) # defer.h implementation specific
+    endif()
+
     add_test(NAME ${TEST_NAME} COMMAND ${TEST_EXECUTABLE})
   endforeach()
 endif()
