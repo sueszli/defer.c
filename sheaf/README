@@ -1,0 +1,84 @@
+sheaf: task dispatching made simple
+
+     ⣀                    ⢀⡀  
+    ⣰⣿⡆               ⣄ ⢀⣴⣿⡇  
+ ⢠⣄ ⣿⣿⡿ ⢀⡀           ⣸⣿ ⢸⣿⡿   
+ ⠈⣿⣆⠘⠟⢀⣼⣿⠁    ⢀    ⣠⡀⢹⣿⡇⠈⣁⣤⣶⠖ 
+ ⣀⠙⢿⡆⢰⣿⡿⠃    ⣰⣿⡇   ⣿⣧⠈⠏⢠⣾⠿⠿⠋  
+ ⢻⣷⡀⠁⠈⢁⣤⣶⠁⣴⡄⢸⣿⣿⡇   ⣿⣿⠂⣀⣠⣤⣤⡄
+ ⠈⢿⣿ ⣴⣿⡿⠃ ⣿⣷ ⠟⢁⣠⣶⠇ ⠈⠁⢴⣿⡿⠟⠉  
+   ⠙ ⠛⠋⠁ ⣦⠈⢿⠃⣰⣿⡿⠏  ⣾⠆    ⣴⣿ 
+    ⣿    ⣿⣷⡀ ⠋⣁⣤⡤ ⢰⡏ ⢸⣆ ⣾⣿⡿   
+    ⣿    ⢻⣿⠃⣰⣿⣿⠟ ⢀⡿  ⢿⣿⡄⠹⠛⢁⣤⡤  
+    ⣿     ⠈⡀⠛⠋⠁  ⣼⡇⢰⣆⠈⢿⠇⢠⣾⣿⠟  
+    ⣿     ⢸⠃    ⢀⣿ ⢸⣿⣆⠈ ⠋⣉⣠⡄ 
+    ⣿     ⣿     ⢸⡇ ⠘⢿⡟⢀⣶⣿⡿⠋   
+    ⢻⡆   ⢸⡏     ⣾⡇  ⢀⣀⠘⠛⠉     
+    ⠘⠓   ⠘⠃     ⠛⠁  ⠘⠋        
+
+# features
+
+a minimal, zero-dependency, proof-of-concept library for task dispatching in c:
+
+- pthreads for compute-heavy tasks, inspired by goroutines
+- cooperative async for io-heavy tasks, inspired by the javascript event loop
+
+# usage
+
+```
+$ tail -n +10 src/demo_go.c
+
+    static void task(u32 id) {
+        usleep((u32)((rand() % 1000) * 1000));
+        printf("finished task %u\n", id);
+    }
+
+    i32 main(void) {
+        u32 *results = malloc(4 * sizeof(u32));
+        defer({ free(results); printf("cleaned up\n"); });
+
+        go({ task(1); });
+        go({ task(2); });
+        go({ task(3); });
+
+        wait();
+        return EXIT_SUCCESS;
+    }
+
+$ make demo-go
+
+    finished task 2
+    finished task 1
+    finished task 3
+    cleaned up
+
+$ tail -n +6 src/demo_async.c
+
+    static void ping(void) {
+        for (u8 i = 0; i < 2; i++) {
+            printf("ping\n");
+            async_yield();
+        }
+    }
+
+    static void pong(void) {
+        for (u8 i = 0; i < 2; i++) {
+            printf("pong\n");
+            async_yield();
+        }
+    }
+
+    i32 main(void) {
+        async_spawn(ping);
+        async_spawn(pong);
+        async_run_all();
+        return EXIT_SUCCESS;
+    }
+
+$ make demo-async
+
+    ping
+    pong
+    ping
+    pong
+```
