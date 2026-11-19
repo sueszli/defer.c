@@ -35,18 +35,6 @@ $ make docker-clang-test
     100% tests passed, 0 tests failed out of 1
 ```
 
-# sheaf
-
-[Sheaf](sheaf/README) is an experimental task-dispatching subproject. It explores
-pthread-backed tasks and a cooperative scheduler. It has its own build and tests,
-and the [AGPL-3.0 license](sheaf/LICENSE) applies to Sheaf.
-
-From the repository root, run its Docker-based tests with:
-
-```sh
-(cd sheaf && make test)
-```
-
 # limitations
 
 (1) you can only have one defer block per line, because the `UNIQUE_NAME` macro uses `__LINE__` for name generation.
